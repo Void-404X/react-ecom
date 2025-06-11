@@ -10,12 +10,15 @@ const MainContent = () => {
 
   const [filter, setFilter] = useState("all");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [products, setProducts] = useState<any[]>([]);
   const [allProducts, setAllProducts] = useState<any[]>([]); // Store all products
+  const [totalProducts, setTotalProducts] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
   useEffect(() => {
     let url = `https://dummyjson.com/products?limit=100`; // Get all products initially
+    console.log(products, totalProducts, currentPage, itemsPerPage);
 
     if (keyword) {
       url = `https://dummyjson.com/products/search?q=${keyword}`;
@@ -25,6 +28,11 @@ const MainContent = () => {
       .get(url)
       .then((response) => {
         setAllProducts(response.data.products); // Store all products
+        setTotalProducts(response.data.total);
+        // Set paginated products
+        const startIdx = (currentPage - 1) * itemsPerPage;
+        const endIdx = startIdx + itemsPerPage;
+        setProducts(response.data.products.slice(startIdx, endIdx));
       })
       .catch((error) => {
         console.error("Error fetching data", error);
