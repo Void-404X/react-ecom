@@ -1,4 +1,3 @@
-import React from "react";
 import { MessageCircle, ThumbsUp } from "lucide-react";
 
 const PopularBlogs = () => {
